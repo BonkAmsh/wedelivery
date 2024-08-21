@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders List</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.orders-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 900px;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.controls {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.controls input,
+.controls select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 250px;
+}
+
+.controls input {
+    flex: 1;
+}
+
+.controls select {
+    flex-shrink: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table th,
+table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+</style>
+</head>
+<body>
+    <div class="orders-container">
+        <h2>Orders List</h2>
+        <div class="controls">
+            <input type="text" id="search" placeholder="Search by customer name">
+            <select id="statusFilter">
+                <option value="">All Statuses</option>
+                <option value="Pending">Pending</option>
+                <option value="Delivered">Delivered</option>
+            </select>
+        </div>
+        <table id="ordersTable">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Address</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const orders = [
+        { id: '001', customer: 'Shashi', address: 'Gandhi Nagar 3rd cross, Ballari-583101', status: 'Pending' },
+        { id: '002', customer: 'Dhar Reddy', address: 'Miller Pet 4th cross, Hospet-583120', status: 'Delivered' },
+        { id: '003', customer: 'Chaitanya ', address: 'Kindi Camp, Gangavati-583227', status: 'Pending' },
+ 	{ id: '004', customer: 'Koushik', address: 'Sri Ram Nagar, Gangavati-583227', status: 'Pending' },
+        { id: '005', customer: 'Sai  Kiran Karutari', address: 'Ragavndra Colony 2nd Stage, Ballari-583110', status: 'Delivered' },
+        { id: '006', customer: 'Vishnu Prasad B', address: 'Cowlbazar , Ballari-583103', status: 'Pending' },
+	{ id: '007', customer: 'Arjun ', address: 'Vishal Nagar 3rd cross, Ballari-583001', status: 'Pending' },
+        { id: '008', customer: 'Krishna Vamshi ', address: 'Indira Nagar, Ballari-583101', status: 'Delivered' },
+        { id: '009', customer: 'Vinay Kumar ', address: 'Patel Nagar 2nd Cross, Ballari-583010', status: 'Pending' },
+	{ id: '010', customer: 'Boya Vamshi ', address: 'SN Pet, 1st Cross, Ballari-583310', status: 'Pending' },
+        { id: '011', customer: 'Jane Smith', address: 'OPD circle,Ballari-583102', status: 'Delivered' },
+        { id: '012', customer: 'Jim Brown', address: 'Infantry Road, 4th Cross, Ballari-583100', status: 'Pending' },
+        // Add more orders as needed
+    ];
+
+    const tableBody = document.querySelector('#ordersTable tbody');
+    const searchInput = document.getElementById('search');
+    const statusFilter = document.getElementById('statusFilter');
+
+    function renderTable(filteredOrders) {
+        tableBody.innerHTML = '';
+        filteredOrders.forEach(order => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${order.id}</td>
+                <td>${order.customer}</td>
+                <td>${order.address}</td>
+                <td>${order.status}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function filterOrders() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const status = statusFilter.value;
+        
+        const filteredOrders = orders.filter(order => {
+            const matchesSearch = order.customer.toLowerCase().includes(searchTerm);
+            const matchesStatus = status === '' || order.status === status;
+            return matchesSearch && matchesStatus;
+        });
+        
+        renderTable(filteredOrders);
+    }
+
+    searchInput.addEventListener('input', filterOrders);
+    statusFilter.addEventListener('change', filterOrders);
+
+    // Initial render
+    renderTable(orders);
+});
+</script>
+</body>
+</html>
